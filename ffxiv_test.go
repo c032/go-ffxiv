@@ -15,6 +15,10 @@ import (
 )
 
 func TestClient_WorldStatus(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping test in short mode.")
+	}
+
 	var (
 		err error
 		c   ffxiv.Client
