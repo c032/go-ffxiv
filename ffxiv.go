@@ -10,13 +10,14 @@ package ffxiv
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
 	"time"
 
-	goquery "github.com/PuerkitoBio/goquery"
+	"github.com/PuerkitoBio/goquery"
 )
 
 // websiteURLStr is the base URL for all requests.
@@ -77,8 +78,23 @@ func (c *client) WorldStatus() ([]WorldStatus, error) {
 	}
 	defer resp.Body.Close()
 
-	var doc *goquery.Document
-	doc, err = goquery.NewDocumentFromReader(resp.Body)
+	var wss []WorldStatus
+	wss, err = ParseWorldStatusPage(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("could not parse world status: %w", err)
+	}
+
+	return wss, nil
+}
+
+func ParseWorldStatusPage(r io.Reader) ([]WorldStatus, error) {
+	var (
+		err error
+
+		doc *goquery.Document
+	)
+
+	doc, err = goquery.NewDocumentFromReader(r)
 	if err != nil {
 		return nil, fmt.Errorf("could not parse response body: %w", err)
 	}
