@@ -41,7 +41,7 @@ func TestClient_WorldStatus(t *testing.T) {
 	}
 }
 
-func TestParseWorldStatus(t *testing.T) {
+func TestParseWorldStatusPage(t *testing.T) {
 	var (
 		err error
 		f   *os.File
@@ -59,7 +59,7 @@ func TestParseWorldStatus(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected := []ffxiv.WorldStatus{
+	expectedAllWorldStatus := []ffxiv.WorldStatus{
 		ffxiv.WorldStatus{Group: "Chaos", Name: "Cerberus", Category: ffxiv.CategoryStandard, ServerStatus: ffxiv.StatusOnline, CanCreateNewCharacters: true},
 		ffxiv.WorldStatus{Group: "Chaos", Name: "Louisoix", Category: ffxiv.CategoryStandard, ServerStatus: ffxiv.StatusOnline, CanCreateNewCharacters: true},
 		ffxiv.WorldStatus{Group: "Chaos", Name: "Moogle", Category: ffxiv.CategoryStandard, ServerStatus: ffxiv.StatusOnline, CanCreateNewCharacters: true},
@@ -143,7 +143,31 @@ func TestParseWorldStatus(t *testing.T) {
 		ffxiv.WorldStatus{Group: "Meteor", Name: "Zeromus", Category: ffxiv.CategoryPreferred, ServerStatus: ffxiv.StatusOnline, CanCreateNewCharacters: true},
 	}
 
-	if got, want := len(wss), len(expected); got != want {
+	if got, want := len(wss), len(expectedAllWorldStatus); got != want {
 		t.Fatalf("len(ParseWorldStatus(f)) = %d; want %d", got, want)
+	}
+
+	for i, wantWorldStatus := range expectedAllWorldStatus {
+		gotWorldStatus := wss[i]
+
+		if got, want := gotWorldStatus.Group, wantWorldStatus.Group; got != want {
+			t.Errorf("wss[%d].Group = %#v; want %#v", i, got, want)
+		}
+
+		if got, want := gotWorldStatus.Name, wantWorldStatus.Name; got != want {
+			t.Errorf("wss[%d].Name = %#v; want %#v", i, got, want)
+		}
+
+		if got, want := gotWorldStatus.Category, wantWorldStatus.Category; got != want {
+			t.Errorf("wss[%d].Category = %#v; want %#v", i, got, want)
+		}
+
+		if got, want := gotWorldStatus.ServerStatus, wantWorldStatus.ServerStatus; got != want {
+			t.Errorf("wss[%d].ServerStatus = %#v; want %#v", i, got, want)
+		}
+
+		if got, want := gotWorldStatus.CanCreateNewCharacters, wantWorldStatus.CanCreateNewCharacters; got != want {
+			t.Errorf("wss[%d].CanCreateNewCharacters = %#v; want %#v", i, got, want)
+		}
 	}
 }
