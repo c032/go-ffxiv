@@ -8,13 +8,13 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 package ffxiv
 
-type ServerStatus int
+type ServerStatus string
 
 const (
-	StatusUnknown ServerStatus = iota
-	StatusMaintenance
-	StatusPartialMaintenance
-	StatusOnline
+	StatusUnknown            ServerStatus = ""
+	StatusMaintenance        ServerStatus = "maintenance"
+	StatusPartialMaintenance ServerStatus = "partial_maintenance"
+	StatusOnline             ServerStatus = "online"
 )
 
 type ServerCategory string
