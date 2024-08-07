@@ -20,6 +20,9 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// Version is used to keep track of breaking changes in the structs.
+const Version = 1
+
 // websiteURLStr is the base URL for all requests.
 //
 // For the current features the region doesn't matter so I just chose EU, but
